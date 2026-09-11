@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google MEO Manager PRO | KAZUMIYA</title>
+<meta name="description" content="Googleクチコミの返信・投稿・分析を自動化。現役ホテルGMが開発したホテル専用MEOツール。月¥8,000から。">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0f2744;
+    --navy-light: #1a3a60;
+    --gold: #b8972a;
+    --gold-light: #d4af3a;
+    --gold-pale: #f5edc8;
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --text: #1a2332;
+    --text-muted: #5a6a7e;
+    --border: #dde3ec;
+    --font: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(15, 39, 68, 0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(184, 151, 42, 0.3);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-main {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+  }
+
+  .logo-sub {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+  }
+
+  .header-cta {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 9px 22px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .header-cta:hover { background: var(--gold-light); }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--navy);
+    padding: 130px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(184,151,42,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.72rem;
+    padding: 5px 16px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+    letter-spacing: 0.1em;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.35;
+    margin-bottom: 20px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-en {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 15px 36px;
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 15px 36px;
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: var(--font);
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.6); }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 40px;
+  }
+
+  .hero-stat-item { text-align: center; }
+
+  .hero-stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .hero-stat-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ===== SECTION BASE ===== */
+  section { padding: 80px 40px; }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+
+  .section-title-en {
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
+
+  /* ===== PROBLEM ===== */
+  .problem { background: var(--off-white); }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid #c0392b;
+    border-radius: 6px;
+    padding: 20px 22px;
+  }
+
+  .problem-card-icon { font-size: 1.4rem; margin-bottom: 10px; }
+
+  .problem-card h3 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .problem-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ===== FEATURES ===== */
+  .features { background: var(--white); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 24px;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+
+  .feature-card:hover {
+    box-shadow: 0 4px 20px rgba(15,39,68,0.08);
+  }
+
+  .feature-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(184,151,42,0.04) 0%, var(--white) 60%);
+  }
+
+  .feature-badge {
+    position: absolute;
+    top: -1px; right: 20px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 0 0 4px 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .feature-icon { font-size: 1.8rem; margin-bottom: 14px; }
+
+  .feature-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .feature-card p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    background: var(--gold-pale);
+    color: var(--gold);
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+    font-weight: 600;
+  }
+
+  /* ===== FLOW ===== */
+  .flow { background: var(--navy); }
+
+  .flow .section-title { color: var(--white); }
+  .flow .section-desc { color: rgba(255,255,255,0.55); }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2px;
+    position: relative;
+  }
+
+  .flow-step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(184,151,42,0.3);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .flow-step-icon { font-size: 1.6rem; margin-bottom: 10px; }
+
+  .flow-step h3 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .flow-step p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+  }
+
+  /* ===== PRICE ===== */
+  .price { background: var(--off-white); }
+
+  .price-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 32px;
+  }
+
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 500px;
+  }
+
+  .price-table th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.78rem;
+  }
+
+  .price-table th.highlight { background: var(--gold); color: var(--navy); }
+
+  .price-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  .price-table td.highlight {
+    background: linear-gradient(135deg, rgba(184,151,42,0.06) 0%, var(--white) 100%);
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .price-table tr:last-child td { border-bottom: none; }
+
+  .price-main {
+    background: var(--white);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 36px;
+    text-align: center;
+    max-width: 420px;
+    margin: 0 auto 32px;
+  }
+
+  .price-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .price-num {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .price-unit {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .price-notes {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  /* ===== TRUST ===== */
+  .trust { background: var(--white); }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .trust-card {
+    background: var(--off-white);
+    border-radius: 8px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .trust-icon { font-size: 2rem; margin-bottom: 12px; }
+
+  .trust-card h3 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .trust-card p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ===== FAQ ===== */
+  .faq { background: var(--off-white); }
+
+  .faq-list { max-width: 680px; }
+
+  .faq-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    padding: 16px 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .faq-q::after {
+    content: '＋';
+    color: var(--gold);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .faq-q.open::after { content: '－'; }
+
+  .faq-a {
+    padding: 0 20px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s;
+  }
+
+  .faq-a.open {
+    max-height: 200px;
+    padding: 0 20px 16px;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    background: var(--navy);
+    text-align: center;
+    padding: 80px 40px;
+  }
+
+  .cta-final h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .cta-final p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.88rem;
+    margin-bottom: 36px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #080f1a;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 28px 40px;
+    font-size: 0.72rem;
+  }
+
+  footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  /* ===== DIVIDER ===== */
+  .gold-line {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 0 32px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    header { padding: 12px 20px; }
+    section { padding: 60px 20px; }
+    .hero { padding: 110px 20px 60px; }
+    .hero-stats { gap: 28px; }
+    .cta-final { padding: 60px 20px; }
+    .price-main { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="logo-main">Google MEO Manager PRO</span>
+    <span class="logo-sub">by KAZUMIYA</span>
+  </div>
+  <a href="#apply" class="header-cta">無料相談・申込</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">ホテル・旅館・民宿 専用ツール（飲食店・美容院など他業種にも対応）</div>
+  <h1>Googleクチコミを、<br>経営の武器にする。</h1>
+  <p class="hero-en">Turn Google reviews into your competitive advantage.</p>
+  <p class="hero-desc">
+    返信の自動生成から投稿管理・経営分析レポートまで。<br>
+    ホテル運営の現場から生まれた MEO管理ツールです。
+  </p>
+  <div class="hero-cta-group">
+    <a href="#apply" class="btn-primary">今すぐ申し込む — ¥8,000/月</a>
+    <a href="#features" class="btn-secondary">機能を見る</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">30秒</span>
+      <span class="hero-stat-label">外国語クチコミへの返信時間</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">4言語</span>
+      <span class="hero-stat-label">日・英・中・韓 対応</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">¥0</span>
+      <span class="hero-stat-label">初期費用</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-inner">
+    <span class="section-title-en">PROBLEM</span>
+    <h2 class="section-title">こんなお悩みはありませんか？</h2>
+    <div class="gold-line"></div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-card-icon">🌏</div>
+        <h3>外国語のクチコミが放置されている</h3>
+        <p>英語・中国語・韓国語のクチコミに返信できず、インバウンド客の印象が悪くなっている。</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon">⏰</div>
+        <h3>返信に時間がかかりすぎる</h3>
+        <p>クチコミの確認・翻訳・文章作成・投稿まで、1件で30分以上かかることも。</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon">📉</div>
+        <h3>Googleの評価が競合に負けている</h3>
+        <p>返信率・評価スコアが低いと検索順位にも影響。集客機会を失い続けている。</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon">📊</div>
+        <h3>クチコミデータを経営に活かせない</h3>
+        <p>お客様の声が蓄積されているのに、改善や会議資料に使えていない。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <span class="section-title-en">FEATURES</span>
+    <h2 class="section-title">3つの機能で、MEOを全自動化</h2>
+    <div class="gold-line"></div>
+    <p class="section-desc">Googleアカウントでログインするだけ。難しい設定は一切不要です。</p>
+    <div class="features-grid">
+      <div class="feature-card featured">
+        <div class="feature-badge">人気No.1</div>
+        <div class="feature-icon">✍️</div>
+        <h3>クチコミ自動返信</h3>
+        <p>Googleクチコミを自動取得し、AIが4言語対応の返信文を30秒で生成。編集してワンクリックで投稿できます。外国語クチコミも翻訳不要。</p>
+        <span class="feature-tag">日・英・中・韓 対応</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📣</div>
+        <h3>Googleビジネス投稿</h3>
+        <p>季節のお知らせ・キャンペーン・観光情報など、AIがカテゴリに合わせた投稿文を自動生成。画像付きでGoogleビジネスプロフィールに直接投稿。</p>
+        <span class="feature-tag">テンプレート＋AI生成</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>経営会議レポート</h3>
+        <p>評価推移・言語別分析・競合比較・AI改善提案をPDFで自動生成。経営会議の資料作成が不要になります。</p>
+        <span class="feature-tag">PDF出力対応</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="flow">
+  <div class="section-inner">
+    <span class="section-title-en">HOW IT WORKS</span>
+    <h2 class="section-title" style="color:#fff;">使い方は、たった4ステップ</h2>
+    <div class="gold-line"></div>
+    <p class="section-desc">導入から初回返信まで、最短10分。</p>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-step-icon">🔑</div>
+        <h3>ライセンス購入</h3>
+        <p>月額¥8,000でライセンスキーを発行。施設ごとに1ライセンス。</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-step-icon">🔗</div>
+        <h3>Google連携</h3>
+        <p>Googleアカウントでログインするだけ。難しい設定は一切不要。</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-step-icon">🤖</div>
+        <h3>AIが返信文を生成</h3>
+        <p>クチコミを選んでボタンを押すだけ。AIが30秒で返信文を作成。</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-step-icon">🚀</div>
+        <h3>ワンクリック投稿</h3>
+        <p>確認・編集してGoogleへ直接投稿。コピペ不要で作業完了。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section class="price" id="price">
+  <div class="section-inner">
+    <span class="section-title-en">PRICING</span>
+    <h2 class="section-title">シンプルな料金体系</h2>
+    <div class="gold-line"></div>
+
+    <div class="price-main">
+      <div class="price-label">月額料金（施設ごと）</div>
+      <div class="price-num">¥8,000</div>
+      <div class="price-unit">/ 月 / 施設（税込¥8,800）</div>
+      <a href="#apply" class="btn-primary" style="width:100%; display:block; margin-bottom:16px;">今すぐ申し込む</a>
+      <div class="price-notes">
+        初期費用 ¥0　／　契約期間の縛りなし<br>
+        いつでもキャンセル可能
+      </div>
+    </div>
+
+    <div class="price-table-wrap">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>比較</th>
+            <th>外注システム</th>
+            <th>大手MEOツール</th>
+            <th class="highlight">Google MEO Manager PRO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>初期費用</td>
+            <td>100万円以上</td>
+            <td>数十万円</td>
+            <td class="highlight">¥0</td>
+          </tr>
+          <tr>
+            <td>月額費用</td>
+            <td>別途保守費用</td>
+            <td>数万円〜</td>
+            <td class="highlight">¥8,000</td>
+          </tr>
+          <tr>
+            <td>4言語対応</td>
+            <td>△ 要カスタム</td>
+            <td>△ 一部のみ</td>
+            <td class="highlight">✅ 標準対応</td>
+          </tr>
+          <tr>
+            <td>経営レポート</td>
+            <td>△ 要カスタム</td>
+            <td>△ 限定的</td>
+            <td class="highlight">✅ PDF出力対応</td>
+          </tr>
+          <tr>
+            <td>ホテル特化</td>
+            <td>△</td>
+            <td>✕</td>
+            <td class="highlight">✅ 現役GMが開発</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="section-inner">
+    <span class="section-title-en">WHY KAZUMIYA</span>
+    <h2 class="section-title">ホテル運営の現場から生まれたツール</h2>
+    <div class="gold-line"></div>
+    <p class="section-desc">一般的なITツールとは違います。ホテルの現場を知っているから、必要な機能だけが揃っています。</p>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">🏨</div>
+        <h3>ホテル現場から生まれた開発</h3>
+        <p>ホテル運営の現場から生まれたツールです。実際の運営経験をもとに、必要な機能だけを厳選しました。</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🌺</div>
+        <h3>沖縄・観光地に特化</h3>
+        <p>石垣島・沖縄の観光業に最適化。インバウンド対応・季節投稿など、観光地ならではの機能が揃っています。</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔒</div>
+        <h3>安心のセキュリティ</h3>
+        <p>Googleの公式APIを使用。ライセンスキー認証でアクセス管理。お客様のデータは安全に管理されます。</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">📞</div>
+        <h3>丁寧なサポート</h3>
+        <p>導入から運用まで、開発者が直接サポート。ホテル業務を理解したサポート担当が対応します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="section-inner">
+    <span class="section-title-en">FAQ</span>
+    <h2 class="section-title">よくあるご質問</h2>
+    <div class="gold-line"></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">導入に専門知識は必要ですか？</div>
+        <div class="faq-a">不要です。Googleアカウントでのログインとライセンスキーの入力だけで始められます。初回セットアップはKAZUMIYAがサポートします。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">複数施設で使えますか？</div>
+        <div class="faq-a">はい。施設ごとに1ライセンス（¥8,000/月）をご購入いただきます。複数施設での導入も対応しています。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">外国語のクチコミも対応できますか？</div>
+        <div class="faq-a">はい。日本語・英語・中国語（簡体字・繁体字）・韓国語の4言語に対応しています。外国語のクチコミを貼り付けると、AIが自動で言語を検出して返信文を生成します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">いつでも解約できますか？</div>
+        <div class="faq-a">はい。契約期間の縛りはありません。月単位でご利用いただけます。解約はマイページから簡単に手続きできます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">無料トライアルはありますか？</div>
+        <div class="faq-a">現在は無料トライアルは行っておりませんが、導入前のデモ・ご説明は無料で承っています。お気軽にお問い合わせください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">楽天・じゃらんのクチコミにも使えますか？</div>
+        <div class="faq-a">Google MEO Manager PROはGoogleクチコミ専用です。楽天・じゃらん等のOTAクチコミには、同じKAZUMIYAの「口コミ分析AI PRO（¥3,500/月）」をご利用ください。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="apply">
+  <div class="section-inner">
+    <h2>まず、無料でご相談ください。</h2>
+    <p>導入のご質問・デモのご要望はお気軽にどうぞ。<br>開発者が直接対応します。</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <a href="mailto:info@kazumiya-ai.com?subject=Google MEO Manager PRO お問い合わせ" class="btn-primary">
+        メールでお問い合わせ
+      </a>
+      <a href="https://hotel-google-meo-manager.vercel.app" class="btn-secondary" target="_blank">
+        ツールを見てみる
+      </a>
+    </div>
+    <p style="margin-top:24px; font-size:0.75rem; color:rgba(255,255,255,0.35);">
+      info@kazumiya-ai.com　／　通常2営業日以内にご返信します
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="margin-bottom:8px;">
+    <a href="/privacy">プライバシーポリシー</a>　／　
+    <a href="https://kazumiya-ai.com">KAZUMIYA</a>
+  </p>
+  <p>© 2026 KAZUMIYA. All rights reserved.</p>
+</footer>
+
+<script>
+  function toggleFaq(el) {
+    const answer = el.nextElementSibling;
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      el.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+</script>
+
+</body>
+</html>
