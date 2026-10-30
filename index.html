@@ -553,6 +553,50 @@
     margin-bottom: 36px;
   }
 
+  /* ===== RELATED SERVICES ===== */
+  .related {
+    background: var(--off-white);
+    padding: 56px 40px;
+  }
+
+  .related-card {
+    display: block;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 22px 24px;
+    text-decoration: none;
+    color: var(--text);
+    max-width: 680px;
+    transition: box-shadow 0.2s;
+  }
+
+  .related-card:hover {
+    box-shadow: 0 4px 20px rgba(15,39,68,0.08);
+  }
+
+  .related-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .related-card p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .related-more {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
   /* ===== FOOTER ===== */
   footer {
     background: #080f1a;
@@ -581,6 +625,7 @@
     .hero-stats { gap: 28px; }
     .cta-final { padding: 60px 20px; }
     .price-main { padding: 28px 20px; }
+    .related { padding: 48px 20px; }
   }
 </style>
 </head>
@@ -873,10 +918,25 @@
   </div>
 </section>
 
+<!-- RELATED SERVICES -->
+<section class="related">
+  <div class="section-inner">
+    <span class="section-title-en">OTHER SERVICES</span>
+    <h2 class="section-title">KAZUMIYAのその他のサービス</h2>
+    <div class="gold-line"></div>
+    <a href="https://tax.kazumiya-ai.com/" class="related-card">
+      <h3>宿泊税台帳PRO</h3>
+      <p>石垣市・宮古島市・名護市・恩納村・北谷町・本部町の宿泊税（令和9年2月1日施行）に対応した申告・台帳ソフト。楽天トラベル・じゃらん・Booking.comの予約を貼るだけで取り込み、納入申告書と月計表を自動作成します。月額3,980円。</p>
+      <span class="related-more">沖縄6市町村の宿泊税申告ソフトを見る</span>
+    </a>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <p style="margin-bottom:8px;">
     <a href="/privacy">プライバシーポリシー</a>　／　
+    <a href="https://tax.kazumiya-ai.com/">宿泊税台帳PRO</a>　／　
     <a href="https://kazumiya-ai.com">KAZUMIYA</a>
   </p>
   <p>© 2026 KAZUMIYA. All rights reserved.</p>
